@@ -1,7 +1,7 @@
 body_h=6;
-body_t=1;
+body_t=1.2;
 body_l=8;
-hole1_d=2.45;
+hole1_d=2.35;
 hole2_d=1.4;
 ol=0.01;
 
