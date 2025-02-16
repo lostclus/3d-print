@@ -1,10 +1,12 @@
-standoff_l=16;
-hole_d=1.15;
-hole2_d=2;
-hole2_h=0.7;
-body_d=3.5;
-body_h=1.5;
+standoff_sp=16;
+standoff_outher_d=3.5;
+standoff_hole_d=1.15;
+standoff_hole_top_d=2;
+standoff_hole_top_h=0.7;
+
 body_t=1.5;
+body_w=1.5;
+body_r=0.6;
 
 ol=0.01;
 
@@ -12,46 +14,54 @@ include <BOSL2/std.scad>
 
 difference() {
     union() {
-        difference() {
-            cuboid(
-                [standoff_l+body_t, standoff_l+body_t, body_h],
-                rounding=0.4*body_h,
-                edges=TOP,
-                $fn=16*body_h
-            );
-            cuboid(
-                [standoff_l-body_t, standoff_l-body_t, body_h+2*ol],
-                rounding=-0.4*body_h,
-                edges=TOP,
-                $fn=16*body_h
-            );
-        }
-        
-        for(a=[0, 90, 180, 270])
-            rotate([0, 0, a])
-                translate([standoff_l/2, standoff_l/2, 0])
-                    cyl(
-                        d=body_d,
-                        h=body_h,
-                        rounding2=0.4*body_h,
-                        $fn=32*body_d
-                    );
+	zrot_copies([0, 90])
+	    left(standoff_sp/2) {
+		cuboid(
+		    [body_w, standoff_sp, body_t],
+		    anchor=BOTTOM,
+		    rounding=body_r,
+		    edges=TOP,
+		    $fn=48*body_r
+		);
+	    }
+
+	zrot(45)
+	    cuboid(
+		[body_w, sqrt(2*pow(standoff_sp, 2)), body_t],
+		anchor=BOTTOM,
+		rounding=body_r,
+		edges=TOP,
+		$fn=48*body_r
+	    );
+
+	zrot_copies([-90, 0, 90])
+	    left(standoff_sp/2)
+		fwd(standoff_sp/2)
+		    cyl(
+			d=standoff_outher_d,
+			h=body_t,
+			anchor=BOTTOM,
+			rounding2=body_r,
+			$fn=32*standoff_outher_d
+		    );
     }
-    
-    for(a=[0, 90, 180, 270])
-            rotate([0, 0, a])
-                translate([standoff_l/2, standoff_l/2, 0]) {
-                    cyl(
-                        d=hole_d,
-                        h=body_h+2*ol,
-                        $fn=32*hole_d
-                    );
-                    up(body_h/2+ol)
-                    cyl(
-                        d=hole2_d,
-                        h=hole2_h,
-                        anchor=TOP,
-                        $fn=32*hole2_d
-                    );
-                }
+
+    down(ol)
+	zrot_copies([-90, 0, 90])
+	    left(standoff_sp/2)
+		fwd(standoff_sp/2) {
+		    cyl(
+			d=standoff_hole_d,
+			h=body_t+2*ol,
+			anchor=BOTTOM,
+			$fn=32*standoff_hole_d
+		    );
+		    up(body_t+2*ol)
+			cyl(
+			    d=standoff_hole_top_d,
+			    h=standoff_hole_top_h+ol,
+			    anchor=TOP,
+			    $fn=32*standoff_hole_top_d
+			);
+		}
 }
