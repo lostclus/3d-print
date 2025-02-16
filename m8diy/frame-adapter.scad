@@ -10,20 +10,20 @@ frame_hole1_d=2.2;
 
 frame_hole2_sp=36;
 frame_hole2_d=1.3;
-frame_hole2_top_d=2.2;
-frame_hole2_top_h=0.45;
+frame_hole2_top_d=2.4;
+frame_hole2_top_h=0.5;
 
 standoff_hole_sp=20;
-standoff_hole_d=1.7;
-standoff_hole_top_d=2.15;
-standoff_hole_top_h=0.45;
+standoff_hole_d=1.77;
+standoff_hole_top_d=2.65;
+standoff_hole_top_h=0.75;
 
 power_cable_hole_size=15;
 power_cable_hole_r=3;
 
-motor_cable_pos_x=21;
-motor_cable_pos_y=4.15;
-motor_cable_angle=19;
+motor_cable_pos_x=21.5;
+motor_cable_pos_y=4.0;
+motor_cable_angle=18;
 motor_cable_w=3.2;
 motor_cable_l=1.6;
 motor_cable_r=0.75;

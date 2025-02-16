@@ -1,22 +1,22 @@
 body_t=1.4;
-body_r=2.35;
+body_r=2.4;
 
 standoff1_hole_sp=20;
-standoff1_hole_d=1.7;
-standoff1_hole_bot_d=2.15;
-standoff1_hole_bot_h=0.5;
-standoff1_hole_top_d=3.2;
-standoff1_hole_top_h=0.5;
+standoff1_hole_d=1.77;
+standoff1_hole_bot_d=2.65;
+standoff1_hole_bot_h=0.75;
+standoff1_hole_top_d=3.4;
+standoff1_hole_top_h=0.4;
 
 standoff2_sp=16;
-standoff2_d=2.0;
+standoff2_d=2.5;
 standoff2_h=7.5;
 standoff2_r=0.5;
-standoff2_hole_d=0.8;
-standoff2_hole_h=5;
+standoff2_hole_d=1.1;
+standoff2_hole_h=4;
 
-grid_strut=0.25;
-grid_spacing=2;
+grid_strut=0.45;
+grid_spacing=2.75;
 
 ol=0.01;
 
@@ -47,11 +47,13 @@ difference() {
 
     grid_copies(spacing=[standoff1_hole_sp, standoff1_hole_sp], n=[2, 2]) {
         down(ol) {
+	    up(standoff1_hole_bot_h)
 	    cyl(
 		d=standoff1_hole_d,
-		h=body_t+standoff1_hole_top_h+2*ol,
+		h=body_t+standoff1_hole_top_h-standoff1_hole_bot_h+ol,
 		anchor=BOTTOM,
-		$fn=16*standoff1_hole_d
+		chamfer1=-(standoff1_hole_bot_d-standoff1_hole_d)/2,
+		$fn=32*standoff1_hole_d
 	    );
 	    cyl(
 		d=standoff1_hole_bot_d,
@@ -77,30 +79,38 @@ hex_panel(
 
 zrot_copies([0, 90, 180])
     left(sqrt(2*pow(standoff2_sp, 2))/2)
-	up(body_t-ol)
-	    difference() {
+	difference() {
+	    union() {
 		cyl(
-		    d=standoff2_d,
-		    h=standoff2_h,
+		    d=standoff2_d+2*standoff2_r,
+		    h=body_t,
 		    anchor=BOTTOM,
-		    rounding1=-standoff2_r,
-		    $fn=16*standoff2_d
+		    $fn=32*standoff2_d
 		);
-		up(standoff2_h+ol)
+		up(body_t-ol)
 		    cyl(
-			d=standoff2_hole_d,
-			h=standoff2_hole_h,
-			anchor=TOP,
-			$fn=16*standoff2_hole_d
+			d=standoff2_d,
+			h=standoff2_h,
+			anchor=BOTTOM,
+			rounding1=-standoff2_r,
+			$fn=16*standoff2_d
 		    );
-		left(standoff2_d/2)
-		    down(ol)
-			cuboid(
-			    [
-				standoff2_r+ol,
-				standoff2_d+2*standoff2_r,
-				standoff2_r+ol,
-			    ],
-			    anchor=RIGHT+BOTTOM
-			);
 	    }
+	    up(body_t+standoff2_h+ol)
+		cyl(
+		    d=standoff2_hole_d,
+		    h=standoff2_hole_h,
+		    anchor=TOP,
+		    $fn=16*standoff2_hole_d
+		);
+	    left(standoff2_d/2)
+		down(ol)
+		    cuboid(
+			[
+			    standoff2_r,
+			    standoff2_d,
+			    body_t+standoff2_r+ol
+			],
+			anchor=BOTTOM+RIGHT
+		    );
+	}
