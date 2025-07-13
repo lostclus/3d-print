@@ -8,15 +8,15 @@ frame_fix_h=4.1;
 frame_fix_l=15.8;
 
 body_l=40;
-body_t=1.5;
+body_t=1.25;
 
 conn_w=5.0;
 conn_h=10.2;
-conn_l=8;
+conn_l=6;
 conn_pos_z=1;
 
-leg_w=30;
-leg_l=12;
+leg_w=22;
+leg_l=10;
 leg_r=2.5;
 
 hole_sp=7.5;
