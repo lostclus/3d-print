@@ -12,7 +12,8 @@ back_hole_d=2.2;
 back_hole_dx=20;
 back_hole_dy=14.25;
 
-elrs_antenna_mount_inner_d=3;
+elrs_antenna_mount_inner_d1=3.8;
+elrs_antenna_mount_inner_d2=3.0;
 elrs_antenna_mount_outer_d=6.0;
 elrs_antenna_mount_len=22;
 elrs_antenna_mount_h=8;
@@ -21,7 +22,8 @@ elrs_antenna_mount_gap_y=0.5;
 elrs_antenna_mount_base_l=2.75;
 
 vtx_antenna_mount_base_d=8.0;
-vtx_antenna_mount_inner_d=3.5;
+vtx_antenna_mount_inner_d1=4.0;
+vtx_antenna_mount_inner_d2=3.0;
 vtx_antenna_mount_outer_d=6.5;
 vtx_antenna_mount_len=4;
 vtx_antenna_mount_gap=0.5;
@@ -31,9 +33,11 @@ gps_module_l=17;
 gps_module_h=4.5;
 gps_mount_angle=30;
 gps_mount_t=1.2;
+gps_mount_r=1.0;
 gps_mount_standoff_w=8;
 gps_mount_standoff_l=8;
 gps_mount_standoff_h=5.5;
+gps_mount_standoff_r=1.5;
 gps_mount_gap=6;
 
 ol=0.01;
@@ -141,17 +145,20 @@ back(32) {
 	    elrs_antenna_mount_h-
 	    elrs_antenna_mount_outer_d/2
 	)
-	    yrot(90)
-		cyl(
-		    d=elrs_antenna_mount_inner_d,
-		    h=elrs_antenna_mount_len+2*ol,
-		    $fn=16*elrs_antenna_mount_inner_d
-		);
+	    zrot_copies(n=2, d=elrs_antenna_mount_len+ol)
+		yrot(90)
+		    cyl(
+			d1=elrs_antenna_mount_inner_d1,
+			d2=elrs_antenna_mount_inner_d2,
+			h=(elrs_antenna_mount_len-elrs_antenna_mount_gap_x)/2+2*ol,
+			anchor=TOP,
+			$fn=16*elrs_antenna_mount_inner_d1
+		    );
     }
 }
 
 // VTX antenna mount
-back(17) right(5) {
+back(17) right(4.7) {
     difference() {
         union() {
 	    cyl(
@@ -169,10 +176,11 @@ back(17) right(5) {
 	}
 	down(ol) {
 	    cyl(
-		d=vtx_antenna_mount_inner_d,
+		d1=vtx_antenna_mount_inner_d1,
+		d2=vtx_antenna_mount_inner_d2,
 		h=vtx_antenna_mount_len+2*ol,
 		anchor=BOTTOM,
-		$fn=16*vtx_antenna_mount_inner_d
+		$fn=16*vtx_antenna_mount_inner_d1
 	    );
 	    cuboid(
 		[
@@ -195,7 +203,10 @@ union() {
 		gps_mount_standoff_l,
 		gps_mount_standoff_h*2
 	    ],
-	    anchor=BOTTOM
+	    anchor=BOTTOM,
+	    rounding=gps_mount_standoff_r,
+	    edges="Z",
+	    $fn=16*gps_mount_standoff_r
 	);
 	up(gps_mount_standoff_h)
 	    xrot(-gps_mount_angle)
@@ -217,7 +228,10 @@ union() {
 			gps_module_l+2*gps_mount_t,
 			gps_module_h+gps_mount_t
 		    ],
-		    anchor=BOTTOM
+		    anchor=BOTTOM,
+		    rounding=gps_mount_r,
+		    edges="Z",
+		    $fn=16*gps_mount_r
 		);
 		up(gps_mount_t) {
 		    cuboid(
